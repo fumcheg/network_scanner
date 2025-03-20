@@ -1,57 +1,70 @@
-import time
 import os
 import socket
 
-from Header import Header, PORT
-
+from headers import Header, PORT
 
 def udp_send(host, dport, message):
+    '''
+    Sends UDP packet to host:dport.
+    If it gets respose (which is unlikly since the packet is not any service-specific), then dport is open.
+    If it throws socket.timeout, then port is probably open.
+    Returns dport status, dport number, assumed service
+    '''
 
-    try:        
-        connection_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        connection_socket.settimeout(2.0)
-        connection_socket.sendto(message, (host, dport))
-        data, _ = connection_socket.recvfrom(1024)
+    TIMEOUT = 1.0
+    PACKET_SIZE = 1024
 
-    except socket.timeout:
-        return PORT.OPEN_OR_FILTERED, dport
+    try:
+        srvc = socket.getservbyport(dport, 'udp')
+    except:
+        srvc = "Unknown"
 
-    return PORT.OPEN, dport
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as connection_socket:
+        try:        
+            connection_socket.settimeout(TIMEOUT)
+            connection_socket.sendto(message, (host, dport))
+            data, _ = connection_socket.recvfrom(PACKET_SIZE)
 
-def icmp_receive(daddr, scan_dict, stop_event):
+        except socket.timeout:
+            return PORT.OPEN_OR_FILTERED, dport, srvc
+        
+        return PORT.OPEN, dport, srvc
+
+def icmp_receive(daddr, listen_dict, stop_event):
+    '''
+    Serves to detect closed ports. Raw socket is listening for all ICMP packets and identifies those have been sent as a response to our UDP packet.
+    After that it marks that port as closed.
+    '''
+
+    ICMP_UNREACHABLE = 3
+    PORT_UNREACHABLE = 3
+    TIMEOUT = 2.0
+    IS_CLOSED = True
 
     if os.name == "nt":
         socket_protocol = socket.IPPROTO_IP
     else:
         socket_protocol = socket.IPPROTO_ICMP
     
-    socket_listener = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket_protocol)
-    socket_listener.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+    with socket.socket(socket.AF_INET, socket.SOCK_RAW, socket_protocol) as socket_listener:
+        socket_listener.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+        socket_listener.settimeout(TIMEOUT)
 
-    socket_listener.settimeout(5.0)
+        if os.name == "nt": 
+            socket_listener.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
-    if os.name == "nt": 
-        socket_listener.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
+        while not stop_event.isSet():
 
-    print("icmp has begun")
+            try:
+                data, _ = socket_listener.recvfrom(1024)
+                header = Header(data)
 
-    while not stop_event.isSet():
+                if (header.get_protocol() == 1 and
+                    header.get_saddr() == daddr and
+                    header.get_icmp_code() == ICMP_UNREACHABLE and
+                    header.get_icmp_type() == PORT_UNREACHABLE):   
 
-        try:
+                    listen_dict[header.get_dport()] = IS_CLOSED
 
-            data, _ = socket_listener.recvfrom(256)
-            header = Header(data)
-            # print(header.get_saddr(), daddr)
-            # print(header.get_protocol())
-            # print(header.get_icmp_code())
-            # print(header.get_icmp_type())
-            # print(header.get_sport(), header.get_dport())
-            if (header.get_protocol() == 1 and
-                header.get_saddr() == daddr and
-                header.get_icmp_code() == 3 and
-                header.get_icmp_type() == 3):
-                
-                scan_dict[header.get_dport()] = True
-
-        except socket.timeout:
-            pass
+            except socket.timeout:
+                pass # keep going until event is set
