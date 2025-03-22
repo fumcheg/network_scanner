@@ -1,10 +1,23 @@
-1. Run python container with docker compose up
-2. Server documentation http://localhost:6969/docs
-3. To try proxy scan use python3 main.py scan -i 192.168.1.1 -n 10 --outfile
-    --outfile is optional to ouput result to file, name can be specified after the keyword
-    --infile is not relevant
-4. To try http proxy use python3 main.py sendhttp --infile --outfile
-    --infile is mandatory for this mode and shall containt json with 4 particular attributes as was given by task requirement \
-    (e.g. {"Header": "Content-type", "Header-value": "text", "Target":"https://www.google.com", "Method": "GET"}) \
-    attribute names cannot be changed otherwise request won't be validated on server's specified
-    --outfile is optional to ouput result to file, name can be specified after the keyword
+usage: netscan.py [-h] [-i IP] [-n NUM_OF_HOSTS] [--proto [PROTO]] [-p [PORTS]] [--outfile [OUTFILE]] {sweep,scan}
+
+Network scanner - USE WITH SUDO!!!
+
+positional arguments:
+  {sweep,scan}          Scan network by IP or scan host ports
+
+options:
+  -h, --help                                        show this help message and exit
+  -i IP, --ip IP                                    IP address
+  -n NUM_OF_HOSTS, --num_of_hosts NUM_OF_HOSTS      number of hosts (only for sweeper mode)
+  --proto [PROTO]                                   tcp or udp protocol for port scan. TCP by default.
+  -p [PORTS], --ports [PORTS]                       port or ports range (e.g. 1-5000). By default 1-30000.
+  --outfile [OUTFILE]                               output file. If no filename specified, output.txt is used by default.
+
+To scan available hosts:
+python3 netscan.py sweep -i host_ip -n host_count
+
+Usage example:
+
+python3 netscan.py sweep -i 192.168.1.1 -n 10 --outfile # run network sweep with output to output.txt
+sudo python3 netscan.py scan -i 192.168.166.129 --proto udp -p 1-100 # run udp scan for ports 1-100
+sudo python3 netscan.py scan -i 192.168.166.129 --proto tcp -p 80 # run tcp scan for port 80

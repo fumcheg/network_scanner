@@ -1,10 +1,12 @@
 """
 Use example:
-python3 scanner.py sweep -i 192.168.1.1 -n 10 --outfile
+python3 netscan.py sweep -i 192.168.1.1 -n 10 --outfile
+python3 netscan.py scan -i 192.168.1.1 --proto tcp -p 200-300
 
 
 TODO: add typing
 TODO: add exceptions handling for ThreadPoolExecutor
+
 
 """
 
@@ -48,7 +50,7 @@ def create_parser():
         nargs="?",
         type=str,
         default="tcp",
-        help="TCP or UDP protocol for port scan. TCP by default."
+        help="tcp or udp protocol for port scan. TCP by default."
     )
     parser.add_argument(
         # Only for scan mode. Input port or start-end range. Default is 1-30000.
@@ -56,7 +58,7 @@ def create_parser():
         nargs="?",
         type=str,
         default="1-30000",
-        help="Port or port range (e.g. 1-5000). By default 1-30000."
+        help="Port or ports range (e.g. 1-5000). By default 1-30000."
     )    
     parser.add_argument(
         # Output file to save results.
@@ -65,7 +67,7 @@ def create_parser():
         type=str,
         const="output.txt",
         default=None,
-        help="Output file"
+        help="output file. If no filename specified, output.txt is used by default."
     )
 
     def get_args():
@@ -161,6 +163,7 @@ def port_scan(host, dports, proto):
             # start UDP sender tasks
             for dport in dports:
                 results.append(executor.submit(udp_send, host, dport, message))
+                time.sleep(1)
        
         if proto == 'tcp':
             # start TCP sender tasks
@@ -232,6 +235,13 @@ def main():
 
         except Exception as err:
             raise Exception(err)
+        
+    if args["outfile"]:
+        out = write_file(args["outfile"], output)
+        if out:
+            print(out)
+        else:
+            raise FileWriteError(f"Failed to write file with given name! [{args['outfile']}]")
 
 
 if __name__ == "__main__":

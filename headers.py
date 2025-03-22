@@ -63,7 +63,7 @@ class Header:
     def get_icmp_code(self):
         return self.icmp_header[1] 
 
-
+# Not used as of now. Was implemented for manual packet generation during half-handshake
 class Packet:
 
     random.seed()
