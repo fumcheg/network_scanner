@@ -2,7 +2,7 @@ import concurrent.futures
 from threading import Event
 
 from headers import PORT
-from udp_probe import udp_send, icmp_receive
+from probe import udp_send, icmp_receive
 
 def udp_scan(host, dports):
 

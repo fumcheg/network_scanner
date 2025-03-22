@@ -8,13 +8,13 @@ TODO: add exceptions handling for ThreadPoolExecutor
 
 """
 
+import time
 import argparse
-
-from headers import PORT
-from udp_probe import udp_send, icmp_receive
-from sweeper import sweep
 import concurrent.futures
 from threading import Event
+
+from probe import get_source_ip, udp_send, tcp_send, icmp_receive, PORT
+from sweeper import sweep
 
 
 class ParserError(Exception):
@@ -137,7 +137,7 @@ def write_file(name, output):
         return None
 
 
-def udp_scan(host, dports):
+def port_scan(host, dports, proto):
 
     stop_event = Event()
     message = b'test message'
@@ -145,20 +145,31 @@ def udp_scan(host, dports):
     result_dict = dict()
 
     port_count = len(dports)
+    source_ip = get_source_ip(host)
 
     print("-"*30)
     print("Starting scan")
     print(f"Scanned 0/{port_count} ports", end="\r", flush=True)
-
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
         results = []
 
         # start ICMP listening task
         listen_task = executor.submit(icmp_receive, host, listen_dict, stop_event)
         
-        # start UDP sender tasks
-        for dport in dports:
-            results.append(executor.submit(udp_send, host, dport, message))
+        if proto == 'udp':
+            # start UDP sender tasks
+            for dport in dports:
+                results.append(executor.submit(udp_send, host, dport, message))
+       
+        if proto == 'tcp':
+            # start TCP sender tasks
+            for dport in dports:
+                results.append(executor.submit(tcp_send, host, dport, source_ip))
+                # in some cases remote host can limit its TCP or ICMP responses because of high request rate.
+                # in this case you can limit request rate by adding timer
+                # TODO: implement it as a dedicated cmd arg
+                # time.sleep(1)
         
         #scanned ports counter
         scanned = 0
@@ -169,18 +180,20 @@ def udp_scan(host, dports):
             if scanned % 10 == 0:
                 print(f"Scanned {scanned}/{port_count} ports", end="\r", flush=True)
             status, port, srvc = future.result()
-
-            if (listen_dict.get(port) == True):
-                result_dict[port] = [PORT.CLOSED, "None"]
+            if (listen_dict.get(port) == PORT.CLOSED):
+                result_dict[port] = [PORT.CLOSED, "Unknown"]
+            elif (listen_dict.get(port) == PORT.ADMIN_FILTERED):
+                result_dict[port] = [PORT.ADMIN_FILTERED, "Unknown"]                
             else:
                 result_dict[port] = [status, srvc]
+
         # set event to stop ICMP listener
         stop_event.set()
 
         #scan result output
-        print(f"UDP scan is over          ", end="\r", flush=True)
-        output = "\n".join(f"Scanned port: {key:<5}  Status: {result_dict[key][0]:21}  Plausible service: {result_dict[key][1]}"
-                           for key in result_dict.keys() if result_dict[key][0] != PORT.CLOSED)
+        print(f"{proto.upper()} scan is over          ", end="\n", flush=True)
+        output = "\n".join(f"Scanned port: {key:<5}  Status: {result_dict[key][0]:21}  Plausible service: {result_dict[key][1].strip()}"
+                           for key in sorted(result_dict.keys())) #if result_dict[key][0] != PORT.CLOSED)
         
         return output
 
@@ -203,6 +216,7 @@ def main():
     except ParserError as err:
         raise Exception(f"Failed to parse arguments! [error: {err}]")
 
+    output = None
     if args["task"]== "sweep":
         try:
             output = sweep_scan(args["ip_list"])
@@ -213,7 +227,7 @@ def main():
         
     if args["task"] == "scan":
         try:
-            output = udp_scan(args["ip_list"][0], args["port_list"])
+            output = port_scan(args["ip_list"][0], args["port_list"], args["proto"])
             print(output)
 
         except Exception as err:

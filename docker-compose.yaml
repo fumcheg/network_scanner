@@ -1,8 +1,0 @@
-services:
-  http-server:
-    build: .
-    image: python:http-server
-    container_name: http-server
-    restart: unless-stopped
-    ports:
-      - '6969:80'
