@@ -171,10 +171,10 @@ def port_scan(host, dports, proto):
                 # TODO: implement it as a dedicated cmd arg
                 # time.sleep(1)
         
-        #scanned ports counter
+        # scanned ports counter
         scanned = 0
         
-        #collecting finished futures
+        # collecting finished futures
         for future in concurrent.futures.as_completed(results):
             scanned += 1
             if scanned % 10 == 0:
