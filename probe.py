@@ -83,7 +83,7 @@ def tcp_send(host, dport, source_ip):
         
         return PORT.OPEN, dport, srvc    
     
-    # Half-handshake is NOT EMPLEMENTED - isn't worth it. It works, but not quet correct.
+    # Half-handshake is NOT EMPLEMENTED - not enough time. It works, but not quite correctly.
     # with socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP) as connection_socket:
     #     try:   
     #         connection_socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)

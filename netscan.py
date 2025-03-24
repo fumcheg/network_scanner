@@ -6,6 +6,8 @@ python3 netscan.py scan -i 192.168.1.1 --proto tcp -p 200-300
 
 TODO: add typing
 TODO: add exceptions handling for ThreadPoolExecutor
+TODO: re-design sweeper with sockets
+TODO: re-design udp tcp scan as SYN-scan instead of full handshake scan
 
 
 """
