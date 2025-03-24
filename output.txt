@@ -1,3 +1,4 @@
+Scanned 192.168.166.131 in 0.07554912567138672 s
 Scanned port: 1      Status: PORT.CLOSED            Plausible service: tcpmux
 Scanned port: 2      Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 3      Status: PORT.CLOSED            Plausible service: unknown
@@ -8,15 +9,15 @@ Scanned port: 7      Status: PORT.CLOSED            Plausible service: echo
 Scanned port: 8      Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 9      Status: PORT.CLOSED            Plausible service: discard
 Scanned port: 10     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 11     Status: PORT.CLOSED            Plausible service: systat
+Scanned port: 11     Status: PORT.CLOSED            Plausible service: fido		60179/tcp
 Scanned port: 12     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 13     Status: PORT.CLOSED            Plausible service: daytime
 Scanned port: 14     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 15     Status: PORT.CLOSED            Plausible service: # Local services
+Scanned port: 15     Status: PORT.CLOSED            Plausible service: netstat
 Scanned port: 16     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 17     Status: PORT.CLOSED            Plausible service: qotd
 Scanned port: 18     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 19     Status: PORT.CLOSED            Plausible service: # Local services
+Scanned port: 19     Status: PORT.CLOSED            Plausible service: chargen
 Scanned port: 20     Status: PORT.CLOSED            Plausible service: ftp-data
 Scanned port: 21     Status: PORT.OPEN              Plausible service: ftp
 Scanned port: 22     Status: PORT.OPEN              Plausible service: ssh
@@ -40,13 +41,13 @@ Scanned port: 39     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 40     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 41     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 42     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 43     Status: PORT.CLOSED            Plausible service: # Local services
+Scanned port: 43     Status: PORT.CLOSED            Plausible service: whois
 Scanned port: 44     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 45     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 46     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 47     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 48     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 49     Status: PORT.CLOSED            Plausible service: # Local services
+Scanned port: 49     Status: PORT.CLOSED            Plausible service: tacacs
 Scanned port: 50     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 51     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 52     Status: PORT.CLOSED            Plausible service: unknown
@@ -76,8 +77,8 @@ Scanned port: 75     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 76     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 77     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 78     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 79     Status: PORT.CLOSED            Plausible service: # Local services
-Scanned port: 80     Status: PORT.OPEN              Plausible service: # Local services
+Scanned port: 79     Status: PORT.CLOSED            Plausible service: finger
+Scanned port: 80     Status: PORT.OPEN              Plausible service: http
 Scanned port: 81     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 82     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 83     Status: PORT.CLOSED            Plausible service: unknown
@@ -85,7 +86,7 @@ Scanned port: 84     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 85     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 86     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 87     Status: PORT.CLOSED            Plausible service: unknown
-Scanned port: 88     Status: PORT.CLOSED            Plausible service: kerberos
+Scanned port: 88     Status: PORT.CLOSED            Plausible service: tacacs		49/udp
 Scanned port: 89     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 90     Status: PORT.CLOSED            Plausible service: unknown
 Scanned port: 91     Status: PORT.CLOSED            Plausible service: unknown

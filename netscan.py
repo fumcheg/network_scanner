@@ -160,6 +160,7 @@ def port_scan(host, dports, proto):
 
         # start ICMP listening task
         listen_task = executor.submit(icmp_receive, host, listen_dict, stop_event)
+        t1 = time.time()
         
         if proto == 'udp':
             # start UDP sender tasks
@@ -194,10 +195,12 @@ def port_scan(host, dports, proto):
 
         # set event to stop ICMP listener
         stop_event.set()
-
+        t2 = time.time()
+        
         #scan result output
         print(f"{proto.upper()} scan is over          ", end="\n", flush=True)
-        output = "\n".join(f"Scanned port: {key:<5}  Status: {result_dict[key][0]:21}  Plausible service: {result_dict[key][1].strip()}"
+        output = (f"Scanned {host} in {t2-t1} s\n")
+        output += "\n".join(f"Scanned port: {key:<5}  Status: {result_dict[key][0]:21}  Plausible service: {result_dict[key][1].strip()}"
                            for key in sorted(result_dict.keys())) #if result_dict[key][0] != PORT.CLOSED)
         
         return output
