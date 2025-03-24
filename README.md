@@ -8,9 +8,9 @@ positional arguments:
 options:
   -h, --help                                        show this help message and exit
   -i IP, --ip IP                                    IP address, default 192.168.0.1
-  -n NUM_OF_HOSTS, --num_of_hosts NUM_OF_HOSTS      number of hosts (only for sweeper mode), default 1
+  -n NUM_OF_HOSTS, --num_of_hosts NUM_OF_HOSTS      number of hosts (only for sweeper mode), default 1 (sweep mode only)
   --proto [PROTO]                                   tcp or udp protocol for port scan. TCP by default.
-  -p [PORTS], --ports [PORTS]                       port or ports range (e.g. 1-5000). By default 1-30000.
+  -p [PORTS], --ports [PORTS]                       port or ports range (e.g. 1-5000). By default 1-1000.
   --outfile [OUTFILE]                               output file. If no filename specified, output.txt is used by default.
 
 To scan available hosts:

@@ -38,11 +38,11 @@ def create_parser():
     )
     parser.add_argument(
         # Target host to start with. Number of hosts is defined in num_of_hosts (only for sweeper mode).
-        "-i", "--ip", type=str, default="192.168.0.1", help="IP address"
+        "-i", "--ip", type=str, default="192.168.0.1", help="Host IP address, default 192.168.0.1"
     )
     parser.add_argument(
         # Only valid for sweep mode, ignored in scan mode
-        "-n", "--num_of_hosts", type=int, default=1, help="Number of hosts (only for sweeper mode)"
+        "-n", "--num_of_hosts", type=int, default=1, help="Number of hosts (only for sweeper mode), default 1"
     )
     parser.add_argument(
         # Only for scan mode. Input udp or tcp protocol for scanning. Tcp is default.
@@ -50,15 +50,15 @@ def create_parser():
         nargs="?",
         type=str,
         default="tcp",
-        help="tcp or udp protocol for port scan. TCP by default."
+        help="tcp or udp protocol for port scan (only for scan mode). TCP by default."
     )
     parser.add_argument(
         # Only for scan mode. Input port or start-end range. Default is 1-30000.
         "-p", "--ports",
         nargs="?",
         type=str,
-        default="1-30000",
-        help="Port or ports range (e.g. 1-5000). By default 1-30000."
+        default="1-1000",
+        help="Port or ports range (e.g. 1-5000). By default 1-1000."
     )    
     parser.add_argument(
         # Output file to save results.
