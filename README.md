@@ -13,8 +13,6 @@ options:
   -p [PORTS], --ports [PORTS]                       port or ports range (e.g. 1-5000). By default 1-1000.
   --outfile [OUTFILE]                               output file. If no filename specified, output.txt is used by default.
 
-To scan available hosts:
-python3 netscan.py sweep -i host_ip -n host_count
 
 Usage example:
 
