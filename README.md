@@ -1,4 +1,4 @@
-usage: netscan.py [-h] [-i IP] [-n NUM_OF_HOSTS] [--proto [PROTO]] [-p [PORTS]] [--outfile [OUTFILE]] {sweep,scan}
+usage: sudo python3 netscan.py {sweep,scan} [-h] [-i IP] [-n NUM_OF_HOSTS] [--proto [PROTO]] [-p [PORTS]] [--outfile [OUTFILE]]
 
 Network scanner - USE WITH SUDO!!!
 
@@ -7,8 +7,8 @@ positional arguments:
 
 options:
   -h, --help                                        show this help message and exit
-  -i IP, --ip IP                                    IP address
-  -n NUM_OF_HOSTS, --num_of_hosts NUM_OF_HOSTS      number of hosts (only for sweeper mode)
+  -i IP, --ip IP                                    IP address, default 192.168.0.1
+  -n NUM_OF_HOSTS, --num_of_hosts NUM_OF_HOSTS      number of hosts (only for sweeper mode), default 1
   --proto [PROTO]                                   tcp or udp protocol for port scan. TCP by default.
   -p [PORTS], --ports [PORTS]                       port or ports range (e.g. 1-5000). By default 1-30000.
   --outfile [OUTFILE]                               output file. If no filename specified, output.txt is used by default.
